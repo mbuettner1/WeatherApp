@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,8 @@ public class HomeFragment extends Fragment {
     private GoogleMap mMap;
     Double latitude, longitude;
     String cityName;
+    TextToSpeech t1;
+    Button b1;
 
     private HomeViewModel homeViewModel;
 
@@ -71,6 +74,8 @@ public class HomeFragment extends Fragment {
         high = root.findViewById(R.id.max);
         pressure = root.findViewById(R.id.pressure);
         windSpeed = root.findViewById(R.id.wind);
+        b1 = root.findViewById(R.id.read);
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +103,33 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        
+        t1=new TextToSpeech(getActivity().getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    t1.setLanguage(Locale.UK);
+                }
+            }
+        });
+
+        b1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String speakCity = city.getText().toString();
+                Toast.makeText(getActivity().getApplicationContext(), speakCity,Toast.LENGTH_SHORT).show();
+                t1.speak(speakCity, TextToSpeech.QUEUE_FLUSH, null);
+                String speakCountry = country.getText().toString();
+                Toast.makeText(getActivity().getApplicationContext(), speakCountry,Toast.LENGTH_SHORT).show();
+                t1.speak(speakCountry, TextToSpeech.QUEUE_FLUSH, null);
+                String speakDate = date.getText().toString();
+                Toast.makeText(getActivity().getApplicationContext(), speakDate,Toast.LENGTH_SHORT).show();
+                t1.speak(speakDate, TextToSpeech.QUEUE_FLUSH, null);
+                String speakTemp = temp.getText().toString();
+                Toast.makeText(getActivity().getApplicationContext(), speakTemp,Toast.LENGTH_SHORT).show();
+                t1.speak(speakTemp, TextToSpeech.QUEUE_FLUSH, null);
+
+            }
+        });
 
         return root;
     }
@@ -209,6 +240,14 @@ public class HomeFragment extends Fragment {
                 break;
             }
         }
+    }
+
+    public void onPause(){
+        if(t1 !=null){
+            t1.stop();
+            t1.shutdown();
+        }
+        super.onPause();
     }
 
 }
