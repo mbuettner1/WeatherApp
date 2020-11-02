@@ -3,4 +3,6 @@
     <string name="title_home">Weather</string>
     <string name="title_dashboard">Map</string>
     <string name="title_notifications">Forecast</string>
+    <string name="Search">Search</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
